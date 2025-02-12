@@ -1,0 +1,70 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "publish-company-info-deployment-config-qa9b"
+  namespace: "default"
+  labels:
+    app: "publish-company-info-deployment"
+data:
+  PUBSUB_TOPIC: "stock_data_topic"
+  GCP_PROJECT: "stock-data-project-449518"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "publish-company-info-deployment"
+  namespace: "default"
+  labels:
+    app: "publish-company-info-deployment"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "publish-company-info-deployment"
+  template:
+    metadata:
+      labels:
+        app: "publish-company-info-deployment"
+    spec:
+      containers:
+      - name: "publish-company-sha256-1"
+        image: "us.gcr.io/stock-data-project-449518/publish-company@sha256:aa6f0544da897e43f8b5c5c0fec69a35e56579b4041cdd01000b0202f3217976"
+        env:
+        - name: FINNHUB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: finnhub-secret
+              key: API_KEY
+        - name: "PUBSUB_TOPIC"
+          valueFrom:
+            configMapKeyRef:
+              key: "PUBSUB_TOPIC"
+              name: "publish-company-info-deployment-config-qa9b"
+        - name: "GCP_PROJECT"
+          valueFrom:
+            configMapKeyRef:
+              key: "GCP_PROJECT"
+              name: "publish-company-info-deployment-config-qa9b"
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "publish-company-info-deployment-hpa-mluw"
+  namespace: "default"
+  labels:
+    app: "publish-company-info-deployment"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "publish-company-info-deployment"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80
