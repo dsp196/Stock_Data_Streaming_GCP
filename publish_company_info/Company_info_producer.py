@@ -9,9 +9,21 @@ import finnhub
 
 
 
-FINNHUB_API_KEY = "ct9kfs1r01quh43o9jl0ct9kfs1r01quh43o9jlg"
-PUBSUB_TOPIC = "stock_data_topic"
-GCP_PROJECT = "stock-data-project-449518"
+FINNHUB_API_KEY = os.getenv("FINNHUB_API_KEY")
+GCP_PROJECT = os.getenv("GCP_PROJECT")
+PUBSUB_TOPIC = os.getenv("PUBSUB_TOPIC")
+
+if not FINNHUB_API_KEY:
+    raise ValueError("FINNHUB_API_KEY is not set in environment variables!")
+if not GCP_PROJECT:
+    raise ValueError("GCP_PROJECT is not set in environment variables!")
+if not PUBSUB_TOPIC:
+    raise ValueError("PUBSUB_TOPIC is not set in environment variables!")
+
+
+
+
+
 STOCK_SYMBOL = "AAPL"
 PUBLISH_INTERVAL_SEC = 60
 finnhub_client = finnhub.Client(api_key=FINNHUB_API_KEY)
