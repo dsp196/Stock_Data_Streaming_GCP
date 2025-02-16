@@ -5,6 +5,6 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY Publish_stock_producer.py /app
+COPY Publish_stock_producer_time.py /app
 
 CMD ["python", "Publish_stock_producer_time.py"]
