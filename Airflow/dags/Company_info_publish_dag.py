@@ -16,8 +16,7 @@ default_args = {
 def branch_stock_job(**kwargs):
     eastern = pytz.timezone('US/Eastern')
     exec_date = kwargs['execution_date'].astimezone(eastern)
-    if exec_date.weekday() < 6:
-        # Checking market hours: 9:30 AM <= current time < 4:00 PM
+    if exec_date.weekday() < 5:
         market_start = datetime.strptime("09:30", "%H:%M").time()
         market_end = datetime.strptime("16:00", "%H:%M").time()
         if market_start <= exec_date.time() < market_end:
@@ -29,7 +28,7 @@ def branch_company_job(**kwargs):
     exec_date = kwargs['execution_date'].astimezone(eastern)
     now_eastern = datetime.now(eastern)
     # Run only on weekdays and at 10:00 AM (allowing a 2-minute window)
-    if exec_date.weekday() < 6 and exec_date.hour == 20 and exec_date.minute < 11:
+    if exec_date.weekday() < 5 and exec_date.hour == 9 and exec_date.minute < 32:
         return "execute_company_job"
     return "skip_company_job"
 
@@ -78,9 +77,6 @@ with DAG(
     # Dummy operator to skip the company info job
     skip_company_job = EmptyOperator(task_id='skip_company_job')
 
-    # Define dependencies:
-    # Both branch operators run in parallel after the DAG triggers every 10 minutes.
-    # The stock branch decides whether to execute or skip the stock job.
-    # The company branch decides whether to execute or skip the company info job.
+    
     branch_stock >> [execute_stock_job, skip_stock_job]
     branch_company >> [execute_company_job, skip_company_job]
