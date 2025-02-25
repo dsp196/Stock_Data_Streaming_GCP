@@ -97,26 +97,24 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 
 ---
 
-## Demo Video & Screenshots
+## Power BI Dashboard &  DAG Screenshot
 
-- **Demo Video**
+- **Dashboard Video**
   
   [![Demo Video]](https://github.com/user-attachments/assets/34748bb6-7358-4bb3-9668-f715a72579fd)  
 
 
-- **Airflow DAG Screenshots**  
-  - **Full DAG View:**  
-    ![DAG Screenshot 1](docs/imgs/dag_screenshot_1.png)  
-  - **Branching Logic:**  
-    ![DAG Screenshot 2](docs/imgs/dag_screenshot_2.png)
+- **Airflow DAG Screenshot**  
+    
+    ![DAG Screenshot 1](https://github.com/dsp196/Stock_Data_Streaming_GCP/blob/main/assets/Dag.png)  
+  
 
-*(Place any actual images inside `docs/imgs/` folder and update paths accordingly.)*
 
 ---
 
 ## Conclusion
 
-By combining **Cloud Run** for containerized scripts, **Pub/Sub** for messaging, **Dataflow** for raw text file output to Cloud Storage, and **BigQuery** for warehousing data, this pipeline ensures:
+By combining **Cloud Run** for containerized scripts, **Pub/Sub** for messaging, **Dataflow** for ingesting raw text file into Cloud Storage, **BigQuery** for warehousing data and **Power BI** for dashboarding, this pipeline ensures:
 
 - **Near Real-Time Data:** Frequent updates of both stock prices and company information, easily visualized in **Power BI**.  
 - **Cost Efficiency:** Serverless approach with Cloud Run and minimal overhead (auto-scaling, no idle cluster).  
