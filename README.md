@@ -100,7 +100,7 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 ## Demo Video & Screenshots
 
 - **Demo Video**  
-  [![Demo Video]](https://github.com/dsp196/Stock_Data_Streaming_GCP/issues/1)  
+  [![Demo Video]](https://github.com/user-attachments/assets/75eb66f1-09be-4655-bf5d-a48c961ae72b)  
 
 
 - **Airflow DAG Screenshots**  
