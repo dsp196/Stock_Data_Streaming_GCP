@@ -17,12 +17,12 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 
 ## Project Overview
 
-- **Goal:** Provide **near real-time** data on live stock quotes and company information, enabling minute-level insights for decision-making.  
+- **Goal:** Provide **near real-time** data on live stock quotes and company information, enabling minute-level insights.  
 - **Key Components:**  
   - **Data Ingestion:** Cloud Run Jobs push data to Pub/Sub.  
   - **Processing:** Dataflow reads messages from Pub/Sub and writes raw data as text files to a Cloud Storage bucket.  
-  - **Analytics & Visualization:** BigQuery ingests these raw files from Cloud Storage for further transformation and then creates big query dataset and table that are loaded in Power BI dashboards.  
-  - **Orchestration:** Airflow (via Cloud Composer) triggers Cloud Run Jobs on a set schedule, controlling when new data is ingested and processed.
+  - **Analytics & Visualization:** BigQuery ingests these raw files from Cloud Storage(Bucket) for further transformation and then loads as BigQuery Tables used for  Power BI dashboards.  
+  - **Orchestration:** Airflow (via Cloud Composer) triggers Cloud Run Jobs on a set schedule, controlling when new data is ingested and processed. Big Query transformations are also scheduled in sync with new data ingestions using scheduled notebooks.
 
 ---
 
@@ -35,24 +35,24 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
    - **Benefit:** Serverless, auto-scaling environment that reduces idle costs compared to a persistent cluster.
 
 2. **Pub/Sub**  
-   - **Usage:** Acts as the messaging layer where the Cloud Run scripts publish data. Dataflow then listens to these messages for downstream processing.
+   - **Usage:** Acts as the messaging layer where the Cloud Run scripts publish data. Pub/Sub then listens to these messages for downstream processing.
 
 3. **Dataflow**  
    - **Usage:** Reads messages from Pub/Sub and writes them as text files to a **raw-data** bucket in Cloud Storage.  
    - **Why:** This decouples ingestion from analytics, storing raw data for reliability and potential reprocessing.
 
-4. **Cloud Storage**  
-   - **Usage:** Stores raw text files (output from Dataflow). BigQuery later ingests these files into structured tables.
+4. **Cloud Storage (GCP Bucket)**  
+   - **Usage:** Stores raw text files (output from Dataflow). BigQuery later performs transformations and ingests these files into structured tables.
 
 5. **BigQuery**  
-   - **Usage:** Loads raw text files from Cloud Storage, transforms them as needed, and serves as the data warehouse for analytics. Power BI queries these tables for near real-time insights.
+   - **Usage:** Loads raw text files from Cloud Storage, transforms them as needed, and serves as the data warehouse for analytics. Power BI queries these tables for near real-time dashboarding.
 
 6. **Cloud Composer (Airflow)**  
-   - **Usage:** Orchestrates the pipeline schedules and triggers (Cloud Run jobs, optional BigQuery transformations).  
-   - **Local Testing:** DAGs initially tested locally with Airflow in Docker, then migrated to Cloud Composer for production.
+   - **Usage:** Orchestrates the pipeline schedules and triggers (Cloud Run jobs).  
+   - **Local Testing:** DAGs were first tested locally using Airflow within Docker containers and later transitioned to Cloud Composer for the operational phase.
 
 7. **Terraform**  
-   - **Usage:** Infrastructure as code to provision GCP services such as Pub/Sub topics, Cloud Storage buckets, and BigQuery datasets.  
+   - **Usage:** Infrastructure as code to provision GCP services such as Pub/Sub topics, Cloud Storage buckets, and BigQuery.  
    - **Ensures** consistent, repeatable deployments under version control.
 
 8. **Docker**  
@@ -61,7 +61,7 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 
 9. **Security & Best Practices**  
    - **Credentials Management:** Uses Workload Identity (on GKE) and Cloud Secret Manager for sensitive keys in production.  
-   - **IAM Roles:** Minimally scoped (e.g., `pubsub.publisher`, `secretmanager.secretAccessor`, `run.invoker`) to limit access as needed.
+   - **IAM Roles:** Minimally scoped (e.g., `pubsub.publisher`, `secretmanager.secretAccessor`) to limit access as needed.
 
 ---
 
@@ -75,7 +75,7 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 ### **Stock Quotes Job**
 - **Runs Every 10 Minutes (9:30 AM–4:00 PM ET)**  
   - **Reason:** Provides minute-level insights while limiting cost.  
-  - **Data Flow:** Publishes stock prices to Pub/Sub → Dataflow writes to Cloud Storage → BigQuery loads the data for real-time analytics.
+  - **Data Flow:** Publishes stock prices to Pub/Sub → Dataflow writes to Cloud Storage → BigQuery transforms and loads the data for real-time analytics.
 
 ### **Local Dev → Cloud Composer**
 - **Testing Locally:**  
@@ -83,7 +83,6 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
   - Scripts are containerized to confirm Docker images run as expected.
 - **Production in Cloud Composer:**  
   - Schedules, triggers, and monitors the two Cloud Run jobs at their respective times.  
-  - Optionally triggers BigQuery transformations or queries after data lands in Cloud Storage.
 
 ---
 
@@ -93,7 +92,7 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
    - Python scripts deployed on a GKE Autopilot cluster to validate the orchestration approach with containerized services.  
 
 2. **Migration to Cloud Run Jobs:**  
-   - **Cost Optimization:** Decommissioned GKE in favor of Cloud Run’s serverless model.  
+   - **Cost Optimization:** Transitioned from GKE to Cloud Run’s serverless model,significantly reducing idle running costs.  
    - Orchestrated by Airflow/Cloud Composer to coordinate daily vs. frequent tasks.
 
 ---
