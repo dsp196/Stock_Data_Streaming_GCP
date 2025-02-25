@@ -10,7 +10,7 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 2. [Technologies & Where They Are Used](#technologies--where-they-are-used)  
 3. [Workflow & Scheduling](#workflow--scheduling)  
 4. [Deployment Evolution](#deployment-evolution)  
-5. [Demo Video & Screenshots](#demo-video--screenshots)  
+5. [Power BI Dashboard & DAG Screenshot](#power-bi-dashboard--dag-screenshot)
 6. [Conclusion](#conclusion)
 
 ---
@@ -97,7 +97,8 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 
 ---
 
-## Power BI Dashboard &  DAG Screenshot
+## Power BI Dashboard & DAG Screenshot
+
 
 - **Dashboard Video**
   
@@ -122,6 +123,3 @@ By combining **Cloud Run** for containerized scripts, **Pub/Sub** for messaging,
 - **Infrastructure as Code:** Terraform fosters reproducible, maintainable deployments.  
 - **Scalable Orchestration:** Airflow (Cloud Composer) handles scheduling and branching logic, tested locally before going live.
 
-Explore the repository for Dockerfiles, Terraform scripts, Airflow DAGs, and Python code to see how each piece fits together. For a closer look at the final dashboards, watch the **Demo Video** or refer to our screenshots above. 
-
-Contributions, issues, and suggestions are always welcome! 
