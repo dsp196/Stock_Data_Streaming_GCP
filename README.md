@@ -99,8 +99,9 @@ This repository demonstrates an **end-to-end** pipeline for **real-time ingestio
 
 ## Demo Video & Screenshots
 
-- **Demo Video**  
-  [![Demo Video]](https://github.com/user-attachments/assets/75eb66f1-09be-4655-bf5d-a48c961ae72b)  
+- **Demo Video**
+  https://github.com/user-attachments/assets/3166fd29-59b8-429b-95f7-3f54ef0a11da
+  [![Demo Video]](https://github.com/user-attachments/assets/34748bb6-7358-4bb3-9668-f715a72579fd)  
 
 
 - **Airflow DAG Screenshots**  
